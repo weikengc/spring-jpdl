@@ -17,6 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hamcrest.version>1.2.1</hamcrest.version>
+        <netbeans.hint.license>apache20</netbeans.hint.license>
     </properties>
     
     <dependencies>
