@@ -14,6 +14,16 @@ public class JpdlNamespaceHandlerTest {
 
     @Test
     public void shouldBeAbleToDetectProcessTag() {
-        new ClassPathXmlApplicationContext("com/github/weikengc/spring/jpdl/config/JpdlNamespaceHandlerTest-context.xml");
+        newApplicationContextForTestCase("shouldBeAbleToDetectProcessTag");
+    }
+
+    @Test
+    public void shouldBeAbleToTreatJpdlXmlAsSpringXml() {
+        newApplicationContextForTestCase("shouldBeAbleToTreatJpdlXmlAsSpringXml.jpdl");
+    }
+
+    private static ClassPathXmlApplicationContext newApplicationContextForTestCase(String testCaseName) {
+        return new ClassPathXmlApplicationContext(
+                "com/github/weikengc/spring/jpdl/config/JpdlNamespaceHandlerTest-" + testCaseName + ".xml");
     }
 }
