@@ -1,10 +1,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.Spring-JPDL</groupId>
-    <artifactId>Spring-JPDL</artifactId>
+    <groupId>com.github.weikengc</groupId>
+    <artifactId>spring-jpdl</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Spring JPDL</name>
-    <url>https://github.com/weikengc/Spring-JPDL</url>
+    <url>https://github.com/weikengc/spring-jpdl</url>
+    
+    <scm>
+        <connection>scm:git:git@github.com:weikengc/spring-jpdl.git</connection>
+        <developerConnection>scm:git:git@github.com:weikengc/spring-jpdl.git</developerConnection>
+        <url>https://github.com/weikengc/spring-jpdl</url>
+    </scm>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.5.2-01</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>
