@@ -37,7 +37,7 @@ public class LocalResourcesTest {
     @Test
     public void shouldThrowFileNotFoundExceptionWhenFileDoesNotExists() throws Exception {
         thrown.expect(FileNotFoundException.class);
-        thrown.expectMessage(endsWith("LocalResourcesTest_DoesNotExists.txt"));
+        thrown.expectMessage(endsWith("LocalResourcesTest-DoesNotExists.txt"));
         resources.getFile("DoesNotExists.txt");
     }
 

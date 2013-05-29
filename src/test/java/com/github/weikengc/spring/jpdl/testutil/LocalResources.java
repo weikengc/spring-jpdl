@@ -60,7 +60,7 @@ public class LocalResources {
     public static LocalResources forClass(final Class clazz) {
         try {
             LocalResources resources = new LocalResources(new File(clazz.getResource(".").toURI()));
-            resources.setFilenamePrefix(clazz.getSimpleName() + "_");
+            resources.setFilenamePrefix(clazz.getSimpleName() + "-");
 
             return resources;
         } catch (URISyntaxException ex) {

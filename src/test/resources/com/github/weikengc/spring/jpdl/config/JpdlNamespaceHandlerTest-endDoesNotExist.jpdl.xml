@@ -5,6 +5,4 @@
         <transition to="End"/>
     </start>
 
-    <state name="End"/>
-
 </process>

@@ -15,11 +15,13 @@
  */
 package com.github.weikengc.spring.jpdl.config;
 
+import org.jbpm.api.JbpmException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -30,6 +32,11 @@ public class JpdlNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
         registerBeanDefinitionParser("process", new BeanDefinitionParser() {
             public BeanDefinition parse(Element element, ParserContext parserContext) {
+                NodeList nodeList = element.getElementsByTagName("state");
+                if (nodeList.getLength() == 0) {
+                    throw new JbpmException("attribute <transition to \"End\" doesn't reference an existing activity name");
+                }
+
                 return null;
             }
         });

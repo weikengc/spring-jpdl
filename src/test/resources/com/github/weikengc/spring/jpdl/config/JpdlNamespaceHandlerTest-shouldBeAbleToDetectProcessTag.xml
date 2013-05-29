@@ -7,6 +7,9 @@
           http://jbpm.org/4.0/jpdl http://jbpm.org/4.0/jpdl/jpdl.xsd
 ">
 
-    <jpdl:process/>
+    <jpdl:process>
+        <jpdl:start/>
+        <jpdl:state/>
+    </jpdl:process>
 
 </beans>
