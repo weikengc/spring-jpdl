@@ -7,19 +7,19 @@
     <packaging>jar</packaging>
     <name>Spring JPDL</name>
     <url>https://github.com/weikengc/spring-jpdl</url>
-    
+
     <scm>
         <connection>scm:git:git@github.com:weikengc/spring-jpdl.git</connection>
         <developerConnection>scm:git:git@github.com:weikengc/spring-jpdl.git</developerConnection>
         <url>https://github.com/weikengc/spring-jpdl</url>
     </scm>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hamcrest.version>1.2.1</hamcrest.version>
         <netbeans.hint.license>apache20</netbeans.hint.license>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.jbpm.jbpm4</groupId>
@@ -47,6 +47,11 @@
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0</version>
         </dependency>
     </dependencies>
 
