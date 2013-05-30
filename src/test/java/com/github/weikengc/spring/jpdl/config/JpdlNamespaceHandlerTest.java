@@ -70,7 +70,6 @@ public class JpdlNamespaceHandlerTest {
     }
 
     @Test
-    @Ignore
     public void shouldBeAbleToExecuteProcessFlow() throws Exception {
         ActivityExecution execution = mock(ActivityExecution.class);
 
@@ -80,6 +79,27 @@ public class JpdlNamespaceHandlerTest {
 
         ActivityBehaviour mockActivity = (ActivityBehaviour) context.getBean("mockActivity");
         verify(mockActivity).execute(execution);
+    }
+
+    @Test
+    @Ignore("To be implemented")
+    public void shouldBeAbleToExecuteTwoDifferentProcessFlows() throws Exception {
+        ApplicationContext context = newApplicationContextFor(resources.getFile("executeTwoProcessFlows.jpdl.xml"));
+
+        ActivityBehaviour flow1 = (ActivityBehaviour) context.getBean("flow1");
+        ActivityBehaviour mockActivity1 = (ActivityBehaviour) context.getBean("mockActivity1");
+        ActivityBehaviour flow2 = (ActivityBehaviour) context.getBean("flow2");
+        ActivityBehaviour mockActivity2 = (ActivityBehaviour) context.getBean("mockActivity2");
+
+        ActivityExecution execution1 = mock(ActivityExecution.class);
+        flow1.execute(execution1);
+        verify(mockActivity1).execute(execution1);
+        verify(mockActivity2, never()).execute(execution1);
+
+        ActivityExecution execution2 = mock(ActivityExecution.class);
+        flow2.execute(execution2);
+        verify(mockActivity2).execute(execution2);
+        verify(mockActivity1, never()).execute(execution2);
     }
 
     private static ApplicationContext newApplicationContextFor(File... springXmlFiles) {

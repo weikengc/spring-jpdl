@@ -19,14 +19,25 @@
        http://www.mockito.org/spring/mockito http://www.mockito.org/spring/mockito.xsd
        http://jbpm.org/4.0/jpdl http://jbpm.org/4.0/jpdl/jpdl.xsd">
 
-    <mockito:mock id="mockActivity" class="org.jbpm.api.activity.ActivityBehaviour"/>
+    <mockito:mock id="mockActivity1" class="org.jbpm.api.activity.ActivityBehaviour"/>
+    <mockito:mock id="mockActivity2" class="org.jbpm.api.activity.ActivityBehaviour"/>
 
-    <process xmlns="http://jbpm.org/4.0/jpdl" key="flow">
+    <process xmlns="http://jbpm.org/4.0/jpdl" key="flow1">
         <start>
             <transition to="node"/>
         </start>
 
-        <custom name="node" expr="#{mockActivity}"/>
+        <custom name="node" expr="#{mockActivity1}"/>
+
+        <state name="End"/>
+    </process>
+
+    <process xmlns="http://jbpm.org/4.0/jpdl" key="flow2">
+        <start>
+            <transition to="node"/>
+        </start>
+
+        <custom name="node" expr="#{mockActivity2}"/>
 
         <state name="End"/>
     </process>
