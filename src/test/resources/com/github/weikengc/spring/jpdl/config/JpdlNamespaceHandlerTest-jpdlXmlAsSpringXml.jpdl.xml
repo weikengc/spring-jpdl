@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process xmlns="http://jbpm.org/4.0/jpdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jbpm.org/4.0/jpdl http://jbpm.org/4.0/jpdl/jpdl.xsd">
+
+    <start>
+        <transition to="End"/>
+    </start>
+
+    <state name="End"/>
+
+</process>
