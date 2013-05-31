@@ -16,7 +16,6 @@
 package com.github.weikengc.spring.jpdl.config;
 
 import com.github.weikengc.spring.jpdl.testutil.LocalResources;
-import com.google.common.base.Function;
 import java.io.File;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -28,8 +27,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.jbpm.api.activity.ActivityBehaviour;
 import org.jbpm.api.activity.ActivityExecution;
 import org.junit.Ignore;
-import static java.util.Arrays.asList;
-import static com.google.common.collect.Iterables.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -38,11 +35,6 @@ import static org.mockito.Mockito.*;
  */
 public class JpdlNamespaceHandlerTest {
 
-    private static final Function<File, String> file2AbsolutePath = new Function<File, String>() {
-        public String apply(File f) {
-            return f.getAbsolutePath();
-        }
-    };
     @Rule
     public ExpectedException thrown = ExpectedException.none();
     private LocalResources resources = LocalResources.forClass(getClass());
@@ -101,9 +93,8 @@ public class JpdlNamespaceHandlerTest {
         verify(mockActivity1, never()).execute(execution2);
     }
 
-    private static ApplicationContext newApplicationContextFor(File... springXmlFiles) {
-        String[] springXmlPaths = toArray(transform(asList(springXmlFiles), file2AbsolutePath), String.class);
-        return new FileSystemXmlApplicationContext(springXmlPaths);
+    private static ApplicationContext newApplicationContextFor(File springXmlFile) {
+        return new FileSystemXmlApplicationContext(springXmlFile.getAbsolutePath());
     }
 
     private static <T extends Exception> Matcher cause(Matcher<T> causeMatcher) {
