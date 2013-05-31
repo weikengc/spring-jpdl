@@ -17,7 +17,6 @@ package com.github.weikengc.spring.jpdl.config;
 
 import com.github.weikengc.spring.jpdl.testutil.LocalResources;
 import java.io.File;
-import java.util.Random;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.hamcrest.FeatureMatcher;
@@ -27,7 +26,6 @@ import org.junit.rules.ExpectedException;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.jbpm.api.activity.ActivityBehaviour;
 import org.jbpm.api.activity.ActivityExecution;
-import org.junit.Ignore;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
