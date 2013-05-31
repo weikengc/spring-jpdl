@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.beans.factory.xml.XmlReaderContext;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.NodeList;
 
@@ -51,40 +53,19 @@ public class JpdlNamespaceHandler extends NamespaceHandlerSupport {
             BeanDefinitionBuilder bean = BeanDefinitionBuilder.genericBeanDefinition(BasicActivityBehaviour.class);
 
             Element startNode = DomUtils.getChildElementByTagName(processElement, "start");
-            Element firstTransition = DomUtils.getChildElementByTagName(startNode, "transition");
             log.debug("Processing start node");
-            if (firstTransition instanceof Element) {
-                Element transition = (Element) firstTransition;
-                log.debug("Evaluating transition");
-                String transitionTo = transition.getAttribute("to");
-                log.debug("Start node transitions to '{}'", transitionTo);
-
-                Element transitionTarget = findCustomNodeWithName(transitionTo, processElement);
-                if (transitionTarget != null) {
-                    String expressionName = transitionTarget.getAttribute("expr");
-                    if (expressionName != null) {
-                        String beanName = expressionName.substring(2, expressionName.length() - 1);
-                        log.debug("Custom node [{}] referring to bean '{}'", transitionTo, beanName);
-
-                        if (parserContext.getRegistry().containsBeanDefinition(beanName)) {
-                            bean.addPropertyReference("delegate", beanName);
-                        }
-                    }
-                }
-            }
-            AbstractBeanDefinition bd = bean.getBeanDefinition();
-            return bd;
+            String transition = DomUtils.getChildElementByTagName(startNode, "transition").getAttribute("to");
+            log.debug("Start node transitions to '{}'", transition);
+            searchAndRegisterProcessNode(transition, processElement, parserContext.getRegistry(), bean, parserContext.getReaderContext());
+            return bean.getBeanDefinition();
         }
 
         @Override
-        protected String resolveId(Element element, AbstractBeanDefinition definition, ParserContext parserContext) throws BeanDefinitionStoreException {
-
-            String value = element.getAttribute("key");
-            if (!(value == null || value.isEmpty())) {
-                return value;
+        protected String resolveId(Element process, AbstractBeanDefinition definition, ParserContext parserContext) throws BeanDefinitionStoreException {
+            if (process.hasAttribute("key")) {
+                return process.getAttribute("key");
             }
-
-            return "default";
+            throw new BeanDefinitionStoreException("<process> must contains key attribute.");
         }
 
         private void validateContainsEndState(Element element) throws JbpmException {
@@ -95,6 +76,40 @@ public class JpdlNamespaceHandler extends NamespaceHandlerSupport {
         }
 
         /**
+         * @param customNodeName
+         * @param processElement
+         * @param beanDefinitionRegistry
+         * @param bean
+         */
+        private void searchAndRegisterProcessNode(String customNodeName,
+                Element processElement, BeanDefinitionRegistry beanDefinitionRegistry,
+                BeanDefinitionBuilder bean, XmlReaderContext context) {
+            
+            Element customNode = findCustomNode(processElement);
+            if (customNode == null) {
+                return;
+            }
+            String beanName = extractExpressionFrom(customNode);
+            if (beanName == null) {
+                return;
+            }
+
+            log.debug("Custom node '{}' is referring to bean '{}'", customNodeName, beanName);
+
+            if (beanDefinitionRegistry.containsBeanDefinition(beanName)) {
+                bean.addPropertyReference("delegate", beanName);
+            } else {
+                String errorMessage = String.format("Custom node '%s' referring to non-existent bean [%s]. Line %s", customNodeName, beanName);
+                context.error(errorMessage, customNode);
+            }
+        }
+
+        private String extractExpressionFrom(Element customNode) {
+            String rawExpression = customNode.getAttribute("expr"); // #{expression}
+            return rawExpression == null ? null : rawExpression.substring(2, rawExpression.length() - 1);
+        }
+
+        /**
          * Looks for Element with the given name e.g. <custom
          * name="${nameValue}"/>.
          *
@@ -102,15 +117,10 @@ public class JpdlNamespaceHandler extends NamespaceHandlerSupport {
          * @param parentElement
          * @return
          */
-        private Element findCustomNodeWithName(String nameValue, Element parentElement) {
+        private Element findCustomNode(Element parentElement) {
             List<Element> customNodes = DomUtils.getChildElementsByTagName(parentElement, "custom");
             log.debug("Custom elements found: {}", customNodes);
-            for (Element customNode : customNodes) {
-                if (customNode.hasAttribute("name")) {
-                    return customNode;
-                }
-            }
-            return null;
+            return customNodes.isEmpty() ? null : customNodes.get(0);
         }
     }
 }

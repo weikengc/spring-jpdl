@@ -43,14 +43,15 @@
           </documentation>
         </annotation>
       </attribute>-->
-<!--      <attribute name="key" type="string">
+      <attribute name="key"
+                 type="ID"> <!-- Follows Spring's beans:bean 'id' attribute data type -->
         <annotation>
           <documentation>
             The key can be used to provide a short acronym that will replace the name as the basis for the generated
             process definition id
           </documentation>
         </annotation>
-      </attribute>-->
+      </attribute>
       <attribute name="version" type="int">
         <annotation>
           <documentation>

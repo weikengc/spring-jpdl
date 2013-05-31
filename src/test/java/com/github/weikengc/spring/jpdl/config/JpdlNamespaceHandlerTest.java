@@ -27,6 +27,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.jbpm.api.activity.ActivityBehaviour;
 import org.jbpm.api.activity.ActivityExecution;
 import static org.hamcrest.Matchers.*;
+import org.junit.Ignore;
 import static org.mockito.Mockito.*;
 
 /**
@@ -47,6 +48,25 @@ public class JpdlNamespaceHandlerTest {
     public void shouldThrowWhenTransitionToEndThatDoesNotExist() throws Exception {
         thrown.expect(cause(message(is("attribute <transition to \"End\" doesn't reference an existing activity name"))));
         newApplicationContextFor(resources.getFile("endDoesNotExist.jpdl.xml"));
+    }
+
+    @Test
+    public void shouldThrowWhenProcessKeyDoesNotExist() throws Exception {
+        thrown.expect(message(containsString("<process> must contains key attribute")));
+        newApplicationContextFor(resources.getFile("processKeyDoesNotExist.jpdl.xml"));
+    }
+
+    @Test
+    public void shouldThrowWhenProcessKeyIsEmpty() throws Exception {
+        thrown.expect(cause(message(containsString("'' is not a valid value for 'NCName'"))));
+        newApplicationContextFor(resources.getFile("processKeyIsEmpty.jpdl.xml"));
+    }
+
+    @Test
+    @Ignore
+    public void shouldThrowWhenCustomNodeExpressionReferringToNonExistentBean() throws Exception {
+//        thrown.expect(message(is("Custom node 'node' referring to non-existent bean [mockActivity]")));
+        newApplicationContextFor(resources.getFile("exprReferToNonExistentBean.jpdl.xml"));
     }
 
     @Test
