@@ -17,6 +17,7 @@ package com.github.weikengc.spring.jpdl.config;
 
 import com.github.weikengc.spring.jpdl.testutil.LocalResources;
 import java.io.File;
+import java.util.Random;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.hamcrest.FeatureMatcher;
@@ -40,19 +41,8 @@ public class JpdlNamespaceHandlerTest {
     private LocalResources resources = LocalResources.forClass(getClass());
 
     @Test
-    @Ignore("Later")
-    public void shouldBeAbleToDetectProcessTag() throws Exception {
-        newApplicationContextFor(resources.getFile("shouldBeAbleToDetectProcessTag.xml"));
-    }
-
-    @Test
     public void shouldBeAbleToTreatJpdlXmlAsSpringXml() throws Exception {
-        newApplicationContextFor(resources.getFile("shouldBeAbleToTreatJpdlXmlAsSpringXml.jpdl.xml"));
-    }
-
-    @Test
-    public void shouldBeAbleToHaveFlowThatOnlyStartsThenEnds() throws Exception {
-        newApplicationContextFor(resources.getFile("startsThenEnds.jpdl.xml"));
+        newApplicationContextFor(resources.getFile("jpdlXmlAsSpringXml.jpdl.xml"));
     }
 
     @Test
@@ -63,14 +53,13 @@ public class JpdlNamespaceHandlerTest {
 
     @Test
     public void shouldBeAbleToExecuteProcessFlow() throws Exception {
-        ActivityExecution execution = mock(ActivityExecution.class);
-
         ApplicationContext context = newApplicationContextFor(resources.getFile("executeProcessFlow.jpdl.xml"));
         ActivityBehaviour flow = (ActivityBehaviour) context.getBean("flow");
-        flow.execute(execution);
+        ActivityBehaviour activity = (ActivityBehaviour) context.getBean("mockActivity");
 
-        ActivityBehaviour mockActivity = (ActivityBehaviour) context.getBean("mockActivity");
-        verify(mockActivity).execute(execution);
+        ActivityExecution execution = mock(ActivityExecution.class);
+        flow.execute(execution);
+        verify(activity).execute(execution);
     }
 
     @Test
@@ -78,19 +67,19 @@ public class JpdlNamespaceHandlerTest {
         ApplicationContext context = newApplicationContextFor(resources.getFile("executeTwoProcessFlows.jpdl.xml"));
 
         ActivityBehaviour flow1 = (ActivityBehaviour) context.getBean("flow1");
-        ActivityBehaviour mockActivity1 = (ActivityBehaviour) context.getBean("mockActivity1");
+        ActivityBehaviour activity1 = (ActivityBehaviour) context.getBean("mockActivity1");
         ActivityBehaviour flow2 = (ActivityBehaviour) context.getBean("flow2");
-        ActivityBehaviour mockActivity2 = (ActivityBehaviour) context.getBean("mockActivity2");
+        ActivityBehaviour activity2 = (ActivityBehaviour) context.getBean("mockActivity2");
 
         ActivityExecution execution1 = mock(ActivityExecution.class);
         flow1.execute(execution1);
-        verify(mockActivity1).execute(execution1);
-        verify(mockActivity2, never()).execute(execution1);
+        verify(activity1).execute(execution1);
+        verify(activity2, never()).execute(execution1);
 
         ActivityExecution execution2 = mock(ActivityExecution.class);
         flow2.execute(execution2);
-        verify(mockActivity2).execute(execution2);
-        verify(mockActivity1, never()).execute(execution2);
+        verify(activity2).execute(execution2);
+        verify(activity1, never()).execute(execution2);
     }
 
     private static ApplicationContext newApplicationContextFor(File springXmlFile) {
