@@ -82,7 +82,6 @@ public class JpdlNamespaceHandlerTest {
     }
 
     @Test
-    @Ignore("To be implemented")
     public void shouldBeAbleToExecuteTwoDifferentProcessFlows() throws Exception {
         ApplicationContext context = newApplicationContextFor(resources.getFile("executeTwoProcessFlows.jpdl.xml"));
 
