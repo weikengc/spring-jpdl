@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jbpm.jbpm4</groupId>
-            <artifactId>jbpm-api</artifactId>
+            <artifactId>jbpm-jboss4</artifactId>
             <version>4.0</version>
         </dependency>
         <dependency>
@@ -85,6 +85,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>JBoss Maven Repository</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>Central Maven Repository</id>
+            <url>http://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
